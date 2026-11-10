@@ -55,4 +55,4 @@ Les mises à jour suivantes sont détectées, téléchargées et installées aut
 
 ## Licence
 
-MIT.
+MIT. Voir [LICENSE](LICENSE).
