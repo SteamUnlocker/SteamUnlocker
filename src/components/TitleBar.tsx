@@ -43,7 +43,7 @@ export function TitleBar({ tab, onTab, music, onRestartSteam, restarting, steamF
       {/* Marque avec le nouveau logo */}
       <div data-tauri-drag-region className="flex items-center gap-2.5 min-w-44 pointer-events-none">
         <img src="/icon.png" alt="" className="w-7 h-7 rounded-lg object-cover" />
-        <span className="text-sm font-bold tracking-tight text-white">StTools-Manager</span>
+        <span className="text-sm font-bold tracking-tight text-white">SteamUnlocker</span>
       </div>
 
       {/* Navigation centrale par pilules */}

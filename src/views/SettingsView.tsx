@@ -249,7 +249,7 @@ export function SettingsView({
       </Section>
 
       <p className="text-xs text-ctp-overlay0">
-        StTools-Manager v{updateInfo?.current_version ?? "1.4.0"} · Local, sans compte ni connexion Discord.
+        SteamUnlocker v{updateInfo?.current_version ?? "1.5.0"} · Local, sans compte ni connexion Discord.
       </p>
     </div>
   );

@@ -1,12 +1,12 @@
 [package]
-name = "sttools-manager"
-version = "1.4.0"
-description = "StTools-Manager - Gestionnaire local Steam & Lua"
+name = "steamunlocker"
+version = "1.5.0"
+description = "SteamUnlocker - Gestionnaire local Steam & Lua"
 authors = ["Axolat"]
 edition = "2024"
 
 [lib]
-name = "sttools_manager_lib"
+name = "steamunlocker_lib"
 crate-type = ["rlib"]
 
 [build-dependencies]

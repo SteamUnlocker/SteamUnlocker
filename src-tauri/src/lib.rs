@@ -18,7 +18,7 @@ const BST_RELEASES_API: &str =
 const CR_RELEASES_API: &str =
     "https://api.github.com/repos/madoiscool/CloudRedirect/releases/latest";
 const APP_RELEASES_API: &str =
-    "https://api.github.com/repos/SteamUnlocker/StTools-Manager/releases/latest";
+    "https://api.github.com/repos/SteamUnlocker/SteamUnlocker/releases/latest";
 const MORRENUS_APPLIST_URL: &str = "https://applist.morrenus.xyz/";
 
 static APP_NAMES: OnceLock<RwLock<HashMap<String, String>>> = OnceLock::new();
@@ -128,7 +128,7 @@ fn require_steam() -> Result<PathBuf, String> {
 fn app_data_dir() -> PathBuf {
     dirs::data_local_dir()
         .unwrap_or_else(|| PathBuf::from("."))
-        .join("StTools-Manager")
+        .join("SteamUnlocker")
 }
 
 fn stplugin_dir(steam: &Path) -> PathBuf {
@@ -341,7 +341,7 @@ fn library_folders(steam: &Path) -> Vec<PathBuf> {
 
 fn http_client() -> Result<reqwest::Client, String> {
     reqwest::Client::builder()
-        .user_agent("StTools-Manager/1.2")
+        .user_agent("SteamUnlocker/1.5")
         .timeout(Duration::from_secs(45))
         .build()
         .map_err(|e| format!("Erreur réseau : {e}"))
@@ -1102,7 +1102,7 @@ async fn check_app_update() -> Result<AppUpdateInfo, String> {
     let asset = release
         .assets
         .iter()
-        .find(|a| a.name.eq_ignore_ascii_case("StTools-Manager.exe"));
+        .find(|a| a.name.eq_ignore_ascii_case("SteamUnlocker.exe"));
 
     let update_available =
         parse_semver(&latest) > parse_semver(&current) && asset.is_some();
@@ -1147,11 +1147,11 @@ async fn install_app_update(app: tauri::AppHandle, download_url: String) -> Resu
         .ok_or("Répertoire introuvable")?
         .to_path_buf();
 
-    let local_stage = exe_dir.join("StTools-Manager.exe.new");
+    let local_stage = exe_dir.join("SteamUnlocker.exe.new");
     let staged = if fs::write(&local_stage, &bytes).is_ok() {
         local_stage
     } else {
-        let tmp = std::env::temp_dir().join("StTools-Manager-update.exe");
+        let tmp = std::env::temp_dir().join("SteamUnlocker-update.exe");
         fs::write(&tmp, &bytes).map_err(|e| format!("Écriture mise à jour impossible : {e}"))?;
         tmp
     };
@@ -1211,5 +1211,5 @@ pub fn run() {
             install_app_update
         ])
         .run(tauri::generate_context!())
-        .expect("Erreur au démarrage de StTools-Manager");
+        .expect("Erreur au démarrage de SteamUnlocker");
 }

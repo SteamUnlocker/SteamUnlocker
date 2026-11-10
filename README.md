@@ -1,20 +1,58 @@
-# StTools-Manager
+# SteamUnlocker
 
-Gestionnaire local Steam & Lua écrit en **Rust**, avec une interface épurée **100% en français**, **5 thèmes** (`Classic` par défaut, `Catppuccin Mocha`, `Tokyo Night`, `Nord`, `Emerald`), **sans Discord** et **sans téléchargement de jeux**.
+<p>
+  <img align="right" height="190" src="public/icon.png" alt="SteamUnlocker" />
 
-## Exécutables disponibles
+  [Releases](https://github.com/SteamUnlocker/SteamUnlocker/releases/latest) · [Code source](https://github.com/SteamUnlocker/SteamUnlocker)
 
-- **`StTools-Manager-Installer.exe`** : Installateur autonome en un seul fichier (thème *Classic*, icône dédiée, interrupteurs modernes, détection automatique de mise à jour, désinstallation intégrée, et musique *Yume Nikki - Barracks Settlement* muette par défaut avec bouton icône). Déploie `StTools-Manager.exe` et `WebView2Loader.dll`, crée les raccourcis Bureau / Démarrer et enregistre la désinstallation dans Windows.
-- **`StTools-Manager.exe`** : Application principale autonome (nécessite `WebView2Loader.dll` dans le même dossier).
+  Client desktop Windows pour gérer vos configurations Steam et scripts `.lua`, écrit en **Rust** (**Tauri v2**, **React** & **TypeScript**) avec un **installateur autonome** (`eframe` / `egui`).
 
-## Mises à jour automatiques
+  **SteamUnlocker** gère la bibliothèque de scripts `config\stplug-in` (recherche instantanée par nom de jeu ou AppID, activation/désactivation `.lua` ↔ `.lua.disabled`, éditeur intégré, glisser-déposer `.lua` / `.st` / `.manifest`), l'installation et le réglage de **BetterSteamTools** et **CloudRedirect** via l'onglet **Mode**, ainsi que **5 thèmes** visuels dont le thème **Classic**.
 
-Au démarrage, l'application vérifie automatiquement la dernière release publiée sur **`SteamUnlocker/StTools-Manager`**. Lorsqu'une nouvelle version est disponible et que l'option est activée dans **Paramètres**, elle télécharge l'exécutable, remplace la version locale et redémarre automatiquement.
+  Entièrement en français, 100 % local, sans Discord ni téléchargement de jeux, avec **mises à jour automatiques** intégrées au démarrage via GitHub Releases.
+</p>
 
-## Organisation de l'interface
+<br clear="right" />
 
-- **Accueil** : Compteur de scripts Lua, état des modules Steam, zone glisser-déposer de fichiers `.lua` / `.st` / `.manifest`, et jaquettes des jeux récents.
-- **Bibliothèque** : Recherche instantanée par nom de jeu (catalogue Steam mis en cache), AppID ou nom de fichier ; filtres (`Tous`, `Actifs`, `Inactifs`), activation/désactivation en un clic (`.lua` ↔ `.lua.disabled`), sélection multiple, suppression sécurisée et éditeur Lua intégré.
-- **Mode** : Installation, mise à jour, activation/désactivation et suppression de **BetterSteamTools** (`madoiscool/BetterSteamTools`) et **CloudRedirect** (`madoiscool/CloudRedirect`), avec configuration automatique de `opensteamtool.toml`.
-- **Paramètres** : Raccourcis vers les dossiers Steam (`Steam`, `stplug-in`, `depotcache`), sélecteur de thème, mises à jour automatiques de l'application et du catalogue de noms Steam, état des DLLs et contrôle audio.
-- **Redémarrer Steam** : Action directe accessible depuis l'en-tête.
+## Statistiques
+
+<div>
+  <img src="https://img.shields.io/github/v/release/SteamUnlocker/SteamUnlocker?style=for-the-badge&color=ff333b" alt="Dernière release" />
+  <img src="https://img.shields.io/github/downloads/SteamUnlocker/SteamUnlocker/SteamUnlocker-Installer.exe?displayAssetName=true&style=for-the-badge" alt="Téléchargements Installateur" />
+  <img src="https://img.shields.io/github/downloads/SteamUnlocker/SteamUnlocker/SteamUnlocker.exe?displayAssetName=true&style=for-the-badge" alt="Téléchargements Application" />
+</div>
+
+<br />
+
+<a href="https://www.star-history.com/#SteamUnlocker/SteamUnlocker&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=SteamUnlocker/SteamUnlocker&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=SteamUnlocker/SteamUnlocker&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=SteamUnlocker/SteamUnlocker&type=Date" />
+  </picture>
+</a>
+
+## Prérequis
+
+- **Windows 10 / 11** (64 bits)
+- **Microsoft Edge WebView2 Runtime** (déjà préinstallé sur Windows 10/11)
+- Pour compiler depuis les sources : **Node.js 20+**, **Rust** (`x86_64-pc-windows-gnu`) et **MinGW64**
+
+## Installation
+
+Téléchargez la dernière version depuis l'onglet [Releases](https://github.com/SteamUnlocker/SteamUnlocker/releases/latest) :
+
+- **`SteamUnlocker-Installer.exe`** *(recommandé)* : installateur autonome en un seul fichier (déploie l'application et `WebView2Loader.dll`, crée les raccourcis Bureau / Menu Démarrer et enregistre la désinstallation dans Windows).
+- **`SteamUnlocker-Portable.zip`** : archive portable contenant `SteamUnlocker.exe` et `WebView2Loader.dll`.
+
+Les mises à jour suivantes sont détectées, téléchargées et installées automatiquement au lancement (option configurable dans **Paramètres**).
+
+## Crédits & projets associés
+
+- [BetterSteamTools](https://github.com/madoiscool/BetterSteamTools) : chargement des scripts Lua dans Steam, installable et géré depuis l'onglet **Mode**
+- [CloudRedirect](https://github.com/madoiscool/CloudRedirect) : redirection locale des sauvegardes Steam Cloud, activable et configurable (`opensteamtool.toml`) depuis l'onglet **Mode**
+- [Tauri](https://tauri.app/) & [egui / eframe](https://github.com/emilk/egui) : frameworks Rust utilisés pour l'interface et l'installateur autonome
+
+## Licence
+
+MIT.

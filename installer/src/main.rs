@@ -13,7 +13,7 @@ use winreg::RegKey;
 
 const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 
-const APP_EXE_BYTES: &[u8] = include_bytes!("../../src-tauri/target/release/sttools-manager.exe");
+const APP_EXE_BYTES: &[u8] = include_bytes!("../../src-tauri/target/release/steamunlocker.exe");
 const WEBVIEW_DLL_BYTES: &[u8] =
     include_bytes!("../../src-tauri/target/release/WebView2Loader.dll");
 const BGM_MP3_BYTES: &[u8] = include_bytes!("../../public/bgm.mp3");
@@ -54,7 +54,7 @@ fn main() -> eframe::Result {
     };
 
     eframe::run_native(
-        "StTools-Manager",
+        "SteamUnlocker",
         options,
         Box::new(|cc| {
             setup_fonts_and_theme(&cc.egui_ctx);
@@ -99,7 +99,7 @@ fn load_logo_texture(ctx: &egui::Context) -> Option<egui::TextureHandle> {
     let img = image::load_from_memory(ICON_PNG_BYTES).ok()?.to_rgba8();
     let size = [img.width() as usize, img.height() as usize];
     let color_img = egui::ColorImage::from_rgba_unmultiplied(size, img.as_raw());
-    Some(ctx.load_texture("sttools_logo", color_img, egui::TextureOptions::LINEAR))
+    Some(ctx.load_texture("steamunlocker_logo", color_img, egui::TextureOptions::LINEAR))
 }
 
 fn detect_steam_path() -> Option<String> {
@@ -364,7 +364,7 @@ impl InstallerApp {
     fn new(ctx: &egui::Context) -> Self {
         let default_dir = dirs::data_local_dir()
             .unwrap_or_else(|| PathBuf::from("C:\\Program Files"))
-            .join("StTools-Manager")
+            .join("SteamUnlocker")
             .to_string_lossy()
             .to_string();
 
@@ -387,15 +387,15 @@ impl InstallerApp {
 
     fn resolved_target_dir(&self) -> PathBuf {
         let mut target_dir = PathBuf::from(self.install_dir.trim());
-        if target_dir.file_name().and_then(|n| n.to_str()) != Some("StTools-Manager") {
-            target_dir.push("StTools-Manager");
+        if target_dir.file_name().and_then(|n| n.to_str()) != Some("SteamUnlocker") {
+            target_dir.push("SteamUnlocker");
         }
         target_dir
     }
 
     fn is_already_installed(&self) -> bool {
         self.resolved_target_dir()
-            .join("StTools-Manager.exe")
+            .join("SteamUnlocker.exe")
             .exists()
     }
 
@@ -423,7 +423,7 @@ impl InstallerApp {
             };
 
             let _ = Command::new("taskkill")
-                .args(["/F", "/IM", "StTools-Manager.exe"])
+                .args(["/F", "/IM", "SteamUnlocker.exe"])
                 .creation_flags(CREATE_NO_WINDOW)
                 .output();
 
@@ -446,8 +446,8 @@ impl InstallerApp {
                 return;
             }
 
-            set_status("Installation de StTools-Manager.exe...", 0.35);
-            let exe_path = target_dir.join("StTools-Manager.exe");
+            set_status("Installation de SteamUnlocker.exe...", 0.35);
+            let exe_path = target_dir.join("SteamUnlocker.exe");
             match File::create(&exe_path) {
                 Ok(mut file) => {
                     let chunk_size = (APP_EXE_BYTES.len() / 12).max(1);
@@ -479,13 +479,13 @@ impl InstallerApp {
                 }
             }
 
-            let desktop_lnk = dirs::desktop_dir().map(|d| d.join("StTools-Manager.lnk"));
+            let desktop_lnk = dirs::desktop_dir().map(|d| d.join("SteamUnlocker.lnk"));
             let start_lnk = dirs::config_dir().map(|r| {
                 r.join("Microsoft")
                     .join("Windows")
                     .join("Start Menu")
                     .join("Programs")
-                    .join("StTools-Manager.lnk")
+                    .join("SteamUnlocker.lnk")
             });
 
             if make_desktop {
@@ -532,17 +532,17 @@ impl InstallerApp {
 
         std::thread::spawn(move || {
             let _ = Command::new("taskkill")
-                .args(["/F", "/IM", "StTools-Manager.exe"])
+                .args(["/F", "/IM", "SteamUnlocker.exe"])
                 .creation_flags(CREATE_NO_WINDOW)
                 .output();
             std::thread::sleep(std::time::Duration::from_millis(400));
 
-            let _ = fs::remove_file(target_dir.join("StTools-Manager.exe"));
+            let _ = fs::remove_file(target_dir.join("SteamUnlocker.exe"));
             let _ = fs::remove_file(target_dir.join("WebView2Loader.dll"));
             let _ = fs::remove_dir(&target_dir);
 
             if let Some(desktop) = dirs::desktop_dir() {
-                let _ = fs::remove_file(desktop.join("StTools-Manager.lnk"));
+                let _ = fs::remove_file(desktop.join("SteamUnlocker.lnk"));
             }
             if let Some(roaming) = dirs::config_dir() {
                 let _ = fs::remove_file(
@@ -551,7 +551,7 @@ impl InstallerApp {
                         .join("Windows")
                         .join("Start Menu")
                         .join("Programs")
-                        .join("StTools-Manager.lnk"),
+                        .join("SteamUnlocker.lnk"),
                 );
             }
 
@@ -566,7 +566,7 @@ impl InstallerApp {
 }
 
 const UNINSTALL_KEY: &str =
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\StTools-Manager";
+    "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SteamUnlocker";
 
 fn register_uninstaller(
     dir: &Path,
@@ -576,7 +576,7 @@ fn register_uninstaller(
 ) -> std::io::Result<()> {
     let q = |p: &Path| format!("'{}'", p.display().to_string().replace('\'', "''"));
     let mut script = format!(
-        "Stop-Process -Name 'StTools-Manager' -Force -ErrorAction SilentlyContinue; Start-Sleep -Milliseconds 600; \
+        "Stop-Process -Name 'SteamUnlocker' -Force -ErrorAction SilentlyContinue; Start-Sleep -Milliseconds 600; \
          Remove-Item -LiteralPath {exe},{dll} -Force -ErrorAction SilentlyContinue; \
          Remove-Item -LiteralPath {dir} -ErrorAction SilentlyContinue; ",
         exe = q(exe),
@@ -592,7 +592,7 @@ fn register_uninstaller(
     script.push_str(&format!("Remove-Item -Path 'HKCU:\\{UNINSTALL_KEY}' -Force"));
 
     let (key, _) = RegKey::predef(HKEY_CURRENT_USER).create_subkey(UNINSTALL_KEY)?;
-    key.set_value("DisplayName", &"StTools-Manager")?;
+    key.set_value("DisplayName", &"SteamUnlocker")?;
     key.set_value("DisplayVersion", &env!("CARGO_PKG_VERSION"))?;
     key.set_value("Publisher", &"Axolat")?;
     key.set_value("DisplayIcon", &exe.display().to_string())?;
@@ -615,7 +615,7 @@ fn create_windows_shortcut(target: &Path, work_dir: &Path, link_path: &Path) -> 
          $s.TargetPath = '{target_esc}'; \
          $s.WorkingDirectory = '{}'; \
          $s.IconLocation = '{target_esc},0'; \
-         $s.Description = 'StTools-Manager'; \
+         $s.Description = 'SteamUnlocker'; \
          $s.Save()",
         link_path.display().to_string().replace('\'', "''"),
         work_dir.display().to_string().replace('\'', "''")
@@ -672,7 +672,7 @@ impl eframe::App for InstallerApp {
 
                     ui.add_space(4.0);
                     ui.label(
-                        egui::RichText::new("StTools-Manager")
+                        egui::RichText::new("SteamUnlocker")
                             .size(13.0)
                             .strong()
                             .color(CTP_TEXT),
@@ -818,7 +818,7 @@ impl eframe::App for InstallerApp {
                             ui.vertical(|ui| {
                                 ui.horizontal(|ui| {
                                     ui.label(
-                                        egui::RichText::new("Installer StTools-Manager")
+                                        egui::RichText::new("Installer SteamUnlocker")
                                             .size(20.0)
                                             .strong()
                                             .color(CTP_TEXT),
@@ -932,7 +932,7 @@ impl eframe::App for InstallerApp {
                                     if fld_resp.on_hover_text("Parcourir...").clicked() {
                                         if let Some(p) = rfd::FileDialog::new().pick_folder() {
                                             self.install_dir = p
-                                                .join("StTools-Manager")
+                                                .join("SteamUnlocker")
                                                 .to_string_lossy()
                                                 .to_string();
                                         }
@@ -1107,7 +1107,7 @@ impl eframe::App for InstallerApp {
                             );
                             ui.add_space(4.0);
                             ui.label(
-                                egui::RichText::new("StTools-Manager est prêt à être utilisé.")
+                                egui::RichText::new("SteamUnlocker est prêt à être utilisé.")
                                     .size(13.0)
                                     .color(CTP_SUBTEXT),
                             );
@@ -1143,7 +1143,7 @@ impl eframe::App for InstallerApp {
                                 if resp.clicked() {
                                     if self.launch_after_install {
                                         let exe = PathBuf::from(&self.install_dir)
-                                            .join("StTools-Manager.exe");
+                                            .join("SteamUnlocker.exe");
                                         let _ = Command::new(exe)
                                             .current_dir(&self.install_dir)
                                             .spawn();

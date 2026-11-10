@@ -1,4 +1,4 @@
 @echo off
-title StTools-Manager
+title SteamUnlocker
 cd /d "%~dp0"
-start "" "%~dp0StTools-Manager.exe"
+start "" "%~dp0SteamUnlocker.exe"
