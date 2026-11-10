@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ctp-crust: #060911;
+  --color-ctp-mantle: #0a0f1a;
+  --color-ctp-base: #0e1422;
+  --color-ctp-surface0: #161f33;
+  --color-ctp-surface1: #222e4a;
+  --color-ctp-surface2: #324166;
+  --color-ctp-overlay0: #64748b;
+  --color-ctp-overlay1: #8494ad;
+  --color-ctp-subtext0: #94a3b8;
+  --color-ctp-text: #e2e8f0;
+  --color-ctp-lavender: #ff5c62;
+  --color-ctp-mauve: #ff333b;
+  --color-ctp-sapphire: #ff6b4a;
+  --color-ctp-green: #34d399;
+  --color-ctp-peach: #fbbf24;
+  --color-ctp-red: #ff4455;
+  --color-ctp-on-accent: #ffffff;
+}
+
+/* Thème Classic (par défaut) — reprend la DA du logo (bleu nuit + rouge néon) */
+:root,
+:root[data-theme="classic"] {
+  --color-ctp-crust: #060911;
+  --color-ctp-mantle: #0a0f1a;
+  --color-ctp-base: #0e1422;
+  --color-ctp-surface0: #161f33;
+  --color-ctp-surface1: #222e4a;
+  --color-ctp-surface2: #324166;
+  --color-ctp-overlay0: #64748b;
+  --color-ctp-overlay1: #8494ad;
+  --color-ctp-subtext0: #94a3b8;
+  --color-ctp-text: #e2e8f0;
+  --color-ctp-lavender: #ff5c62;
+  --color-ctp-mauve: #ff333b;
+  --color-ctp-sapphire: #ff6b4a;
+  --color-ctp-green: #34d399;
+  --color-ctp-peach: #fbbf24;
+  --color-ctp-red: #ff4455;
+  --color-ctp-on-accent: #ffffff;
+}
+
+/* Thème Catppuccin Mocha */
+:root[data-theme="catppuccin"] {
+  --color-ctp-crust: #11111b;
+  --color-ctp-mantle: #181825;
+  --color-ctp-base: #1e1e2e;
+  --color-ctp-surface0: #313244;
+  --color-ctp-surface1: #45475a;
+  --color-ctp-surface2: #585b70;
+  --color-ctp-overlay0: #6c7086;
+  --color-ctp-overlay1: #7f849c;
+  --color-ctp-subtext0: #a6adc8;
+  --color-ctp-text: #cdd6f4;
+  --color-ctp-lavender: #b4befe;
+  --color-ctp-mauve: #cba6f7;
+  --color-ctp-sapphire: #74c7ec;
+  --color-ctp-green: #a6e3a1;
+  --color-ctp-peach: #fab387;
+  --color-ctp-red: #f38ba8;
+  --color-ctp-on-accent: #11111b;
+}
+
+/* Thème Tokyo Night */
+:root[data-theme="tokyo"] {
+  --color-ctp-crust: #13141c;
+  --color-ctp-mantle: #16161e;
+  --color-ctp-base: #1a1b26;
+  --color-ctp-surface0: #24283b;
+  --color-ctp-surface1: #323852;
+  --color-ctp-surface2: #414868;
+  --color-ctp-overlay0: #565f89;
+  --color-ctp-overlay1: #737aa2;
+  --color-ctp-subtext0: #9aa5ce;
+  --color-ctp-text: #c0caf5;
+  --color-ctp-lavender: #9ece6a;
+  --color-ctp-mauve: #7aa2f7;
+  --color-ctp-sapphire: #7dcfff;
+  --color-ctp-green: #9ece6a;
+  --color-ctp-peach: #e0af68;
+  --color-ctp-red: #f7768e;
+  --color-ctp-on-accent: #15161e;
+}
+
+/* Thème Nord Frost */
+:root[data-theme="nord"] {
+  --color-ctp-crust: #1e222a;
+  --color-ctp-mantle: #242933;
+  --color-ctp-base: #2e3440;
+  --color-ctp-surface0: #3b4252;
+  --color-ctp-surface1: #434c5e;
+  --color-ctp-surface2: #4c566a;
+  --color-ctp-overlay0: #616e88;
+  --color-ctp-overlay1: #7b88a1;
+  --color-ctp-subtext0: #d8dee9;
+  --color-ctp-text: #eceff4;
+  --color-ctp-lavender: #81a1c1;
+  --color-ctp-mauve: #88c0d0;
+  --color-ctp-sapphire: #5e81ac;
+  --color-ctp-green: #a3be8c;
+  --color-ctp-peach: #ebcb8b;
+  --color-ctp-red: #bf616a;
+  --color-ctp-on-accent: #1e222a;
+}
+
+/* Thème Émeraude */
+:root[data-theme="emerald"] {
+  --color-ctp-crust: #060b09;
+  --color-ctp-mantle: #0a120f;
+  --color-ctp-base: #0e1814;
+  --color-ctp-surface0: #15251e;
+  --color-ctp-surface1: #20382d;
+  --color-ctp-surface2: #2d4f40;
+  --color-ctp-overlay0: #5b7a6c;
+  --color-ctp-overlay1: #7a9b8c;
+  --color-ctp-subtext0: #9cb8aa;
+  --color-ctp-text: #e2f2ea;
+  --color-ctp-lavender: #34d399;
+  --color-ctp-mauve: #10b981;
+  --color-ctp-sapphire: #22d3ee;
+  --color-ctp-green: #34d399;
+  --color-ctp-peach: #fbbf24;
+  --color-ctp-red: #f87171;
+  --color-ctp-on-accent: #05120c;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-ctp-base);
+  color: var(--color-ctp-text);
+  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  user-select: none;
+}
+
+/* Grille technique subtile sur le thème Classic pour rappeler le fond du logo */
+:root[data-theme="classic"] main {
+  background-image:
+    linear-gradient(to right, rgba(255, 51, 59, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 51, 59, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+input,
+textarea,
+select {
+  user-select: text;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ctp-surface1);
+  border-radius: 9999px;
+  border: 2px solid var(--color-ctp-base);
+}

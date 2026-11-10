@@ -1,0 +1,19 @@
+[package]
+name = "sttools-installer"
+version = "1.4.0"
+edition = "2024"
+
+[dependencies]
+eframe = { version = "0.31", default-features = false, features = ["glow", "default_fonts"] }
+rodio = { version = "0.20", default-features = false, features = ["symphonia-mp3"] }
+rfd = "0.15"
+dirs = "6"
+winreg = "0.52"
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
