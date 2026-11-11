@@ -1,20 +1,13 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import {
-  Home,
-  Library,
-  Loader2,
-  Minus,
-  RotateCw,
-  Settings,
-  SlidersHorizontal,
-  Square,
-  Volume2,
-  VolumeX,
-  X,
-} from "lucide-react";
 import { isTauri } from "../lib/api";
 import type { Tab } from "../lib/types";
 import type { Music } from "../lib/useMusic";
+import { useCurrentTheme } from "../lib/useTheme";
+import {
+  ThemeActionGlyph,
+  ThemeNavIcon,
+  ThemeWindowControls,
+} from "./ThemeIcons";
 
 interface Props {
   tab: Tab;
@@ -25,60 +18,65 @@ interface Props {
   steamFound: boolean;
 }
 
-const TABS: { id: Tab; label: string; icon: typeof Home }[] = [
-  { id: "home", label: "Accueil", icon: Home },
-  { id: "library", label: "Bibliothèque", icon: Library },
-  { id: "mode", label: "Mode", icon: SlidersHorizontal },
-  { id: "settings", label: "Paramètres", icon: Settings },
+const TABS: { id: Tab; label: string }[] = [
+  { id: "home", label: "Accueil" },
+  { id: "search", label: "Recherche" },
+  { id: "library", label: "Bibliothèque" },
+  { id: "mode", label: "Mode" },
+  { id: "settings", label: "Paramètres" },
 ];
 
 export function TitleBar({ tab, onTab, music, onRestartSteam, restarting, steamFound }: Props) {
+  const theme = useCurrentTheme();
   const win = isTauri ? getCurrentWindow() : null;
 
   return (
     <header
       data-tauri-drag-region
-      className="h-14 shrink-0 flex items-center justify-between px-4 bg-ctp-mantle border-b border-ctp-surface0"
+      className="theme-header relative z-20 h-14 shrink-0 flex items-center justify-between px-4 bg-ctp-mantle border-b border-ctp-surface0"
     >
-      {/* Marque avec le nouveau logo */}
+      {/* Marque SteamUnlocker */}
       <div data-tauri-drag-region className="flex items-center gap-2.5 min-w-44 pointer-events-none">
         <img src="/icon.png" alt="" className="w-7 h-7 rounded-lg object-cover" />
-        <span className="text-sm font-bold tracking-tight text-white">SteamUnlocker</span>
+        <span
+          className={`text-sm font-bold tracking-tight ${
+            theme === "milk" ? "text-ctp-mauve" : "text-white"
+          }`}
+        >
+          SteamUnlocker
+        </span>
       </div>
 
       {/* Navigation centrale par pilules */}
-      <nav className="flex items-center gap-1 p-1 rounded-xl bg-ctp-crust border border-ctp-surface0">
-        {TABS.map(({ id, label, icon: Icon }) => {
+      <nav className="theme-nav flex items-center gap-1 p-1 rounded-xl bg-ctp-crust border border-ctp-surface0">
+        {TABS.map(({ id, label }) => {
           const active = tab === id;
           return (
             <button
               key={id}
+              data-tab={id}
               onClick={() => onTab(id)}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+              className={`theme-tab-btn flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
                 active
-                  ? "bg-ctp-mauve text-ctp-on-accent shadow-sm"
+                  ? "theme-tab-active bg-ctp-mauve text-ctp-on-accent shadow-sm"
                   : "text-ctp-subtext0 hover:text-white hover:bg-ctp-surface0/50"
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <ThemeNavIcon theme={theme} tab={id} />
               <span>{label}</span>
             </button>
           );
         })}
       </nav>
 
-      {/* Actions rapides + Contrôles fenêtre */}
+      {/* Actions rapides + Contrôles fenêtre stylisés par thème */}
       <div className="flex items-center justify-end gap-1 min-w-44">
         <IconButton
           onClick={onRestartSteam}
           disabled={restarting || !steamFound}
           title="Redémarrer Steam"
         >
-          {restarting ? (
-            <Loader2 className="w-4 h-4 text-ctp-mauve animate-spin" />
-          ) : (
-            <RotateCw className="w-4 h-4" />
-          )}
+          <ThemeActionGlyph theme={theme} kind="restart" spinning={restarting} />
         </IconButton>
 
         <div className="flex items-center gap-1.5 mr-2">
@@ -97,21 +95,18 @@ export function TitleBar({ tab, onTab, music, onRestartSteam, restarting, steamF
             active={music.playing}
             title={music.playing ? "Couper la musique" : "Activer la musique (Yume Nikki)"}
           >
-            {music.playing ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            <ThemeActionGlyph theme={theme} kind="music" active={music.playing} />
           </IconButton>
         </div>
 
         <div className="h-4 w-px bg-ctp-surface0 mx-1" />
 
-        <IconButton onClick={() => win?.minimize()} title="Réduire">
-          <Minus className="w-4 h-4" />
-        </IconButton>
-        <IconButton onClick={() => win?.toggleMaximize()} title="Agrandir">
-          <Square className="w-3.5 h-3.5" />
-        </IconButton>
-        <IconButton onClick={() => win?.close()} title="Fermer" danger>
-          <X className="w-4 h-4" />
-        </IconButton>
+        <ThemeWindowControls
+          theme={theme}
+          onMinimize={() => win?.minimize()}
+          onMaximize={() => win?.toggleMaximize()}
+          onClose={() => win?.close()}
+        />
       </div>
     </header>
   );
@@ -122,14 +117,12 @@ function IconButton({
   onClick,
   title,
   active,
-  danger,
   disabled,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   title: string;
   active?: boolean;
-  danger?: boolean;
   disabled?: boolean;
 }) {
   return (
@@ -140,9 +133,7 @@ function IconButton({
       className={`w-8 h-8 flex items-center justify-center rounded-lg transition disabled:opacity-40 ${
         active
           ? "text-ctp-mauve bg-ctp-mauve/15"
-          : danger
-            ? "text-ctp-subtext0 hover:bg-ctp-red/20 hover:text-ctp-red"
-            : "text-ctp-subtext0 hover:bg-ctp-surface0 hover:text-white"
+          : "text-ctp-subtext0 hover:bg-ctp-surface0 hover:text-white"
       }`}
     >
       {children}

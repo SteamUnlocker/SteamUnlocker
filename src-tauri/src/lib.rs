@@ -10,6 +10,8 @@ use std::time::{Duration, UNIX_EPOCH};
 use winreg::enums::*;
 use winreg::RegKey;
 
+mod search;
+
 const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 const BST_MANIFEST_URL: &str =
     "https://raw.githubusercontent.com/madoiscool/BetterSteamTools/refs/heads/updates/opensteamtool/latest.toml";
@@ -1208,7 +1210,11 @@ pub fn run() {
             uninstall_cloudredirect,
             launch_cloudredirect,
             check_app_update,
-            install_app_update
+            install_app_update,
+            search::get_download_sources,
+            search::search_steam_games,
+            search::get_steam_app_details,
+            search::download_game_files
         ])
         .run(tauri::generate_context!())
         .expect("Erreur au démarrage de SteamUnlocker");

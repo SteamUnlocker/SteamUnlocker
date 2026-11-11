@@ -1,19 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
 import { CheckCircle2, Download, Loader2, XCircle } from "lucide-react";
+import { ThemeBackdrop } from "./components/ThemeBackdrop";
 import { TitleBar } from "./components/TitleBar";
 import { api, isTauri } from "./lib/api";
 import type { AppUpdateInfo, DllStatus, SteamApp, SteamInfo, Tab } from "./lib/types";
 import { useMusic } from "./lib/useMusic";
-import { useTheme } from "./lib/useTheme";
+import { ThemeContext, useTheme } from "./lib/useTheme";
 import { HomeView } from "./views/HomeView";
 import { LibraryView } from "./views/LibraryView";
 import { ModeView } from "./views/ModeView";
+import { SearchView } from "./views/SearchView";
 import { SettingsView } from "./views/SettingsView";
 
 export default function App() {
   const { theme, setTheme } = useTheme();
   const music = useMusic();
-  const [tab, setTab] = useState<Tab>("home");
+  const [tab, setTab] = useState<Tab>(() => {
+    const q = new URLSearchParams(window.location.search).get("tab") as Tab | null;
+    return q && ["home", "search", "library", "mode", "settings"].includes(q) ? q : "home";
+  });
   const [info, setInfo] = useState<SteamInfo | null>(null);
   const [games, setGames] = useState<SteamApp[]>([]);
   const [dlls, setDlls] = useState<DllStatus[]>([]);
@@ -138,7 +143,10 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-ctp-base text-ctp-text">
+    <ThemeContext.Provider value={theme}>
+      <div className="theme-app-shell h-screen flex flex-col bg-ctp-base text-ctp-text relative overflow-hidden">
+        <ThemeBackdrop theme={theme} />
+
       <TitleBar
         tab={tab}
         onTab={go}
@@ -150,7 +158,7 @@ export default function App() {
 
       {/* Bandeau de mise à jour (affiché si auto-update désactivé ou en cours) */}
       {(updating || (updateInfo?.update_available && updateInfo.download_url)) && (
-        <div className="px-4 py-2 bg-ctp-mantle border-b border-ctp-surface0 flex items-center justify-center gap-3 text-xs">
+        <div className="relative z-20 px-4 py-2 bg-ctp-mantle/90 backdrop-blur-md border-b border-ctp-surface0 flex items-center justify-center gap-3 text-xs">
           {updating ? (
             <>
               <Loader2 className="w-3.5 h-3.5 text-ctp-mauve animate-spin" />
@@ -176,10 +184,11 @@ export default function App() {
         </div>
       )}
 
-      <main className="flex-1 min-h-0 overflow-y-auto">
+      <main className="relative z-10 flex-1 min-h-0 overflow-y-auto">
         <div className="max-w-5xl mx-auto p-7 h-full">
           {tab === "home" && (
             <HomeView
+              theme={theme}
               info={info}
               games={games}
               onFiles={importFiles}
@@ -189,6 +198,20 @@ export default function App() {
                 setEditing(g);
                 setTab("library");
               }}
+            />
+          )}
+          {tab === "search" && (
+            <SearchView
+              games={games}
+              onOpenGame={(g) => {
+                setEditing(g);
+                setTab("library");
+              }}
+              onRestartSteam={restartSteam}
+              restarting={restarting}
+              steamFound={Boolean(info?.steam_path)}
+              notify={notify}
+              reload={reload}
             />
           )}
           {tab === "library" && (
@@ -224,7 +247,7 @@ export default function App() {
 
       {toast && (
         <div
-          className={`fixed bottom-5 right-5 max-w-sm px-4 py-2.5 rounded-xl border bg-ctp-mantle text-xs font-medium shadow-xl flex items-center gap-2 ${
+          className={`fixed bottom-5 right-5 z-50 max-w-sm px-4 py-2.5 rounded-xl border bg-ctp-mantle text-xs font-medium shadow-xl flex items-center gap-2 ${
             toast.ok
               ? "border-ctp-green/40 text-ctp-green"
               : "border-ctp-red/40 text-ctp-red"
@@ -238,6 +261,7 @@ export default function App() {
           {toast.msg}
         </div>
       )}
-    </div>
+      </div>
+    </ThemeContext.Provider>
   );
 }

@@ -1,5 +1,37 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Pixelify Sans";
+  src: url("/fonts/PixelifySans.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DotGothic16";
+  src: url("/fonts/DotGothic16.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Retro Gaming";
+  src: url("/fonts/RetroGaming.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "VT323";
+  src: url("/fonts/VT323.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-ctp-crust: #060911;
   --color-ctp-mantle: #0a0f1a;
@@ -126,6 +158,52 @@
   --color-ctp-on-accent: #05120c;
 }
 
+/* Thème Jeu 1 : Yume Nikki (Nexus — indigo nocturne, briques pourpres & rouge Madotsuki) */
+:root[data-theme="yume"] {
+  --color-ctp-crust: #0a0514;
+  --color-ctp-mantle: #120923;
+  --color-ctp-base: #150c2a;
+  --color-ctp-surface0: #22133e;
+  --color-ctp-surface1: #3b2259;
+  --color-ctp-surface2: #5c336e;
+  --color-ctp-overlay0: #876b9e;
+  --color-ctp-overlay1: #a48bba;
+  --color-ctp-subtext0: #c3afd6;
+  --color-ctp-text: #f3e8ff;
+  --color-ctp-lavender: #c084fc;
+  --color-ctp-mauve: #e04c5c;
+  --color-ctp-sapphire: #8b5cf6;
+  --color-ctp-green: #42d68d;
+  --color-ctp-peach: #fbbf24;
+  --color-ctp-red: #ff4764;
+  --color-ctp-on-accent: #ffffff;
+}
+
+/* Thème Jeu 3 : Milk (Milk inside/outside a bag of milk — pixel tramé cramoisi) */
+:root[data-theme="milk"] {
+  --color-ctp-crust: #050105;
+  --color-ctp-mantle: #0c0209;
+  --color-ctp-base: #090107;
+  --color-ctp-surface0: #1b0514;
+  --color-ctp-surface1: #340a24;
+  --color-ctp-surface2: #58133a;
+  --color-ctp-overlay0: #9a4966;
+  --color-ctp-overlay1: #ba607c;
+  --color-ctp-subtext0: #d67e95;
+  --color-ctp-text: #f7b6c1;
+  --color-ctp-lavender: #ff6981;
+  --color-ctp-mauve: #ef3f5b;
+  --color-ctp-sapphire: #c02669;
+  --color-ctp-green: #ff7b90;
+  --color-ctp-peach: #f59e0b;
+  --color-ctp-red: #ff3355;
+  --color-ctp-on-accent: #090107;
+}
+
+:root {
+  --font-app: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+}
+
 html,
 body,
 #root {
@@ -134,8 +212,38 @@ body,
   overflow: hidden;
   background: var(--color-ctp-base);
   color: var(--color-ctp-text);
-  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-app);
   user-select: none;
+}
+
+/* Polices & rendu pixel authentiques par univers de jeu */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+:root[data-theme="yume"] {
+  --font-app: "DotGothic16", "Pixelify Sans", "Segoe UI", sans-serif;
+}
+
+:root[data-theme="yume"] .font-mono {
+  font-family: "DotGothic16", "VT323", monospace;
+  font-size: 0.85rem;
+}
+
+:root[data-theme="milk"] {
+  --font-app: "Retro Gaming", "DotGothic16", Consolas, monospace;
+  cursor: url("/themes/milk/curs.png") 2 2, auto;
+}
+
+:root[data-theme="milk"] button,
+:root[data-theme="milk"] a,
+:root[data-theme="milk"] input[type="range"] {
+  cursor: url("/themes/milk/curs.png") 2 2, pointer !important;
+}
+
+:root[data-theme="milk"] .font-mono {
+  font-family: "Retro Gaming", "DotGothic16", monospace;
 }
 
 /* Grille technique subtile sur le thème Classic pour rappeler le fond du logo */
@@ -144,6 +252,148 @@ body,
     linear-gradient(to right, rgba(255, 51, 59, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 51, 59, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+/* ======== Habillages visuels des thèmes de jeux ======== */
+
+/* En-tête translucide laissant respirer l'artwork derrière */
+:root[data-theme="yume"] .theme-header {
+  background: rgba(16, 8, 30, 0.8) !important;
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid #6e3a5f !important;
+}
+
+:root[data-theme="milk"] .theme-header {
+  background: rgba(8, 1, 6, 0.85) !important;
+  backdrop-filter: blur(8px);
+  border-bottom: 1.5px solid rgba(239, 63, 91, 0.45) !important;
+}
+
+/* --- YUME NIKKI (ASSETS ORIGINAUX RPG MAKER 2003) --- */
+:root[data-theme="yume"] .theme-hero-card {
+  background: linear-gradient(
+      135deg,
+      rgba(110, 24, 48, 0.36) 0%,
+      rgba(20, 9, 26, 0.88) 65%
+    ) !important;
+  backdrop-filter: blur(3px);
+  border: 6px solid transparent !important;
+  border-image-source: url("/themes/yume/frame.png") !important;
+  border-image-slice: 8 !important;
+  border-image-width: 6px !important;
+  border-image-repeat: round !important;
+  border-radius: 2px !important;
+  box-shadow:
+    0 0 0 2px #090412,
+    0 10px 26px rgba(0, 0, 0, 0.6);
+}
+
+:root[data-theme="yume"] .theme-card,
+:root[data-theme="yume"] .theme-dropzone {
+  background: rgba(16, 8, 28, 0.84) !important;
+  backdrop-filter: blur(3px);
+  border: 6px solid transparent !important;
+  border-image-source: url("/themes/yume/frame.png") !important;
+  border-image-slice: 8 !important;
+  border-image-width: 6px !important;
+  border-image-repeat: round !important;
+  border-radius: 2px !important;
+  box-shadow: 0 0 0 2px #090412;
+}
+
+:root[data-theme="yume"] .theme-stat-red {
+  background: linear-gradient(135deg, rgba(118, 22, 42, 0.56), rgba(20, 8, 30, 0.9)) !important;
+  border: 2px solid #c94758 !important;
+  border-radius: 2px !important;
+}
+
+:root[data-theme="yume"] .theme-stat-green {
+  background: linear-gradient(135deg, rgba(16, 68, 48, 0.56), rgba(14, 10, 28, 0.9)) !important;
+  border: 2px solid #42d68d !important;
+  border-radius: 2px !important;
+}
+
+:root[data-theme="yume"] .theme-stat-red p:first-child,
+:root[data-theme="yume"] .theme-stat-green p:first-child {
+  font-family: "VT323", "DotGothic16", monospace;
+  font-size: 1.95rem !important;
+  line-height: 1 !important;
+}
+
+:root[data-theme="yume"] .theme-nav {
+  background: rgba(14, 7, 24, 0.88) !important;
+  border: 2px solid #6b3559 !important;
+  border-radius: 3px !important;
+}
+
+:root[data-theme="yume"] .theme-tab-active {
+  background: rgba(196, 64, 92, 0.24) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #e04c5c;
+  border-radius: 2px !important;
+  box-shadow: 0 0 10px rgba(224, 76, 92, 0.25);
+}
+
+/* --- MILK OUTSIDE A BAG OF MILK (ASSETS ORIGINAUX NIKITA KRYUKOV) --- */
+:root[data-theme="milk"] .theme-hero-card,
+:root[data-theme="milk"] .theme-card,
+:root[data-theme="milk"] .theme-dropzone {
+  background: rgba(10, 7, 13, 0.9) !important;
+  backdrop-filter: blur(2px);
+  border: 8px solid transparent !important;
+  border-image-source: url("/themes/milk/frame.png") !important;
+  border-image-slice: 14 !important;
+  border-image-width: 8px !important;
+  border-image-repeat: stretch !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 rgba(95, 16, 38, 0.45);
+}
+
+:root[data-theme="milk"] .theme-hero-card button,
+:root[data-theme="milk"] .theme-hero-card input,
+:root[data-theme="milk"] .theme-hero-card select,
+:root[data-theme="milk"] .theme-hero-card .rounded-lg,
+:root[data-theme="milk"] .theme-card button,
+:root[data-theme="milk"] .theme-dropzone button,
+:root[data-theme="milk"] .theme-dropzone .rounded-xl {
+  border-radius: 0 !important;
+}
+
+:root[data-theme="milk"] .theme-stat-red,
+:root[data-theme="milk"] .theme-stat-green {
+  background: rgba(14, 3, 12, 0.94) !important;
+  border: 1.5px solid rgba(208, 48, 72, 0.72) !important;
+  border-radius: 0 !important;
+}
+
+:root[data-theme="milk"] .theme-stat-red p:first-child,
+:root[data-theme="milk"] .theme-stat-green p:first-child {
+  font-family: "Retro Gaming", "VT323", monospace;
+  font-size: 1.45rem !important;
+  line-height: 1.15 !important;
+  color: #ef3f5b !important;
+}
+
+:root[data-theme="milk"] .theme-cover-tint img {
+  filter: grayscale(0.28) sepia(0.58) hue-rotate(-46deg) saturate(1.85) contrast(1.08);
+}
+
+:root[data-theme="milk"] .theme-nav {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+:root[data-theme="milk"] .theme-tab-btn:hover {
+  background-image: url("/themes/milk/choice.png");
+  background-size: 100% 100%;
+}
+
+:root[data-theme="milk"] .theme-tab-active {
+  background: rgba(239, 63, 91, 0.2) !important;
+  color: #ffb8c3 !important;
+  border: 1.5px solid #ef3f5b;
+  border-radius: 0 !important;
+  box-shadow: 0 0 10px rgba(239, 63, 91, 0.24);
 }
 
 input,

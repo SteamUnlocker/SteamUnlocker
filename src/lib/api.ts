@@ -2,11 +2,15 @@ import { invoke } from "@tauri-apps/api/core";
 import type {
   AppUpdateInfo,
   DllStatus,
+  DownloadGameResult,
+  DownloadSourceInfo,
   FolderKind,
   LuaConfig,
   ModeStatus,
   SteamApp,
+  SteamAppDetails,
   SteamInfo,
+  SteamSearchResult,
 } from "./types";
 
 export const isTauri = typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
@@ -44,6 +48,13 @@ export const api = {
   toggleCr: (enabled: boolean) => call<boolean>("toggle_cloudredirect", { enabled }),
   uninstallCr: () => call<void>("uninstall_cloudredirect"),
   launchCr: () => call<void>("launch_cloudredirect"),
+
+  // Recherche & téléchargement Steam (sources multiples)
+  downloadSources: () => call<DownloadSourceInfo[]>("get_download_sources"),
+  searchSteam: (query: string) => call<SteamSearchResult[]>("search_steam_games", { query }),
+  steamAppDetails: (appId: string) => call<SteamAppDetails>("get_steam_app_details", { appId }),
+  downloadGameFiles: (appId: string, sourceSlug: string, mode: "install" | "save_zip") =>
+    call<DownloadGameResult>("download_game_files", { appId, sourceSlug, mode }),
 
   // Auto-mise à jour GitHub
   checkAppUpdate: () => call<AppUpdateInfo>("check_app_update"),

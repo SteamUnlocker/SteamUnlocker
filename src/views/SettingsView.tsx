@@ -82,17 +82,17 @@ export function SettingsView({
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-white">Paramètres</h1>
 
-      <Section title="Thème" hint="Classic reprend les couleurs du logo.">
+      <Section title="Thème" hint="Classic reprend les couleurs du logo. Les thèmes de jeux ajoutent un habillage complet.">
         <div className="grid grid-cols-5 gap-2.5">
-          {THEMES.map((t) => {
+          {THEMES.filter((t) => !t.wallpaper).map((t) => {
             const active = theme === t.id;
             return (
               <button
                 key={t.id}
                 onClick={() => setTheme(t.id)}
-                className={`p-3 rounded-xl border text-left transition ${
+                className={`theme-card p-3 rounded-xl border text-left transition ${
                   active
-                    ? "bg-ctp-surface0 border-ctp-mauve"
+                    ? "bg-ctp-surface0 border-ctp-mauve ring-1 ring-ctp-mauve"
                     : "bg-ctp-mantle border-ctp-surface0 hover:border-ctp-surface2"
                 }`}
               >
@@ -110,13 +110,55 @@ export function SettingsView({
             );
           })}
         </div>
+
+        <div className="grid grid-cols-2 gap-2.5 mt-2.5">
+          {THEMES.filter((t) => Boolean(t.wallpaper)).map((t) => {
+            const active = theme === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setTheme(t.id)}
+                className={`theme-card group rounded-xl border text-left overflow-hidden transition ${
+                  active
+                    ? "bg-ctp-surface0 border-ctp-mauve ring-1 ring-ctp-mauve"
+                    : "bg-ctp-mantle border-ctp-surface0 hover:border-ctp-surface2"
+                }`}
+              >
+                <div
+                  className="h-14 w-full bg-cover bg-center relative"
+                  style={{ backgroundImage: `url(${t.wallpaper})` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-1.5 left-2.5 flex items-center gap-1">
+                    {t.colors.map((c, idx) => (
+                      <span
+                        key={idx}
+                        className="w-2.5 h-2.5 rounded-full border border-white/25"
+                        style={{ backgroundColor: c }}
+                      />
+                    ))}
+                  </div>
+                  <span className="absolute top-1.5 right-2 px-1.5 py-0.5 rounded bg-black/70 text-[9px] font-semibold text-white/85">
+                    Jeu
+                  </span>
+                </div>
+                <div className="px-3 py-2 flex items-center justify-between gap-2">
+                  <p className="text-xs font-semibold text-white truncate">{t.label}</p>
+                  {t.subtitle && (
+                    <span className="text-[10px] text-ctp-subtext0 truncate">{t.subtitle}</span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </Section>
 
       <Section
         title="Mises à jour automatiques"
-        hint={`Version installée : v${updateInfo?.current_version ?? "1.4.0"} · GitHub Releases (SteamUnlocker)`}
+        hint={`Version installée : v${updateInfo?.current_version ?? "1.6.0"} · GitHub Releases (SteamUnlocker)`}
       >
-        <div className="rounded-xl bg-ctp-mantle border border-ctp-surface0 p-4 flex items-center justify-between gap-4">
+        <div className="theme-card rounded-xl bg-ctp-mantle border border-ctp-surface0 p-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setAutoUpdate(!autoUpdate)}
@@ -204,7 +246,7 @@ export function SettingsView({
       </Section>
 
       <Section title="Modules Steam" hint="DLL détectées à la racine de Steam.">
-        <div className="rounded-xl bg-ctp-mantle border border-ctp-surface0 divide-y divide-ctp-surface0">
+        <div className="theme-card rounded-xl bg-ctp-mantle border border-ctp-surface0 divide-y divide-ctp-surface0">
           {dlls.length === 0 && <p className="px-4 py-3 text-xs text-ctp-overlay0">Steam introuvable.</p>}
           {dlls.map((d) => (
             <div key={d.name} className="px-4 py-3 flex items-center gap-3">
@@ -249,7 +291,7 @@ export function SettingsView({
       </Section>
 
       <p className="text-xs text-ctp-overlay0">
-        SteamUnlocker v{updateInfo?.current_version ?? "1.5.0"} · Local, sans compte ni connexion Discord.
+        SteamUnlocker v{updateInfo?.current_version ?? "1.6.0"} · Local, sans compte ni connexion Discord.
       </p>
     </div>
   );

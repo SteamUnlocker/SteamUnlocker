@@ -139,7 +139,7 @@ export function ModeView({ notify, reload }: Props) {
       </div>
 
       {/* BetterSteamTools */}
-      <section className="rounded-2xl bg-ctp-mantle border border-ctp-surface0 p-5 space-y-4">
+      <section className="theme-card rounded-2xl bg-ctp-mantle border border-ctp-surface0 p-5 space-y-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-xl bg-ctp-mauve/15 border border-ctp-mauve/30 flex items-center justify-center shrink-0">
@@ -211,7 +211,7 @@ export function ModeView({ notify, reload }: Props) {
       </section>
 
       {/* CloudRedirect */}
-      <section className="rounded-2xl bg-ctp-mantle border border-ctp-surface0 p-5 space-y-4">
+      <section className="theme-card rounded-2xl bg-ctp-mantle border border-ctp-surface0 p-5 space-y-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-xl bg-ctp-sapphire/15 border border-ctp-sapphire/30 flex items-center justify-center shrink-0">

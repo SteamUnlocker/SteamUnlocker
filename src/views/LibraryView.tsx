@@ -280,7 +280,7 @@ function GameList({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Rechercher par nom de jeu, AppID ou fichier…"
-            className="w-full h-10 pl-9 pr-8 rounded-lg bg-ctp-mantle border border-ctp-surface0 text-sm text-white placeholder:text-ctp-overlay0 focus:outline-none focus:border-ctp-mauve"
+            className="theme-card w-full h-10 pl-9 pr-8 rounded-lg bg-ctp-mantle border border-ctp-surface0 text-sm text-white placeholder:text-ctp-overlay0 focus:outline-none focus:border-ctp-mauve"
           />
           {query && (
             <button
@@ -293,7 +293,7 @@ function GameList({
           )}
         </div>
 
-        <div className="flex h-10 p-1 rounded-lg bg-ctp-mantle border border-ctp-surface0">
+        <div className="theme-card flex h-10 p-1 rounded-lg bg-ctp-mantle border border-ctp-surface0">
           {(
             [
               ["scripts", "Scripts", counts.scripts],
@@ -322,14 +322,14 @@ function GameList({
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as SortBy)}
-          className="h-10 px-3 rounded-lg bg-ctp-mantle border border-ctp-surface0 text-xs font-medium text-ctp-text focus:outline-none focus:border-ctp-mauve"
+          className="theme-card h-10 px-3 rounded-lg bg-ctp-mantle border border-ctp-surface0 text-xs font-medium text-ctp-text focus:outline-none focus:border-ctp-mauve"
         >
           <option value="recent">Récents d'abord</option>
           <option value="name">Nom (A-Z)</option>
           <option value="appid">AppID</option>
         </select>
 
-        <div className="flex h-10 rounded-lg bg-ctp-mantle border border-ctp-surface0 focus-within:border-ctp-mauve">
+        <div className="theme-card flex h-10 rounded-lg bg-ctp-mantle border border-ctp-surface0 focus-within:border-ctp-mauve">
           <input
             value={newId}
             onChange={(e) => setNewId(e.target.value)}
@@ -360,7 +360,7 @@ function GameList({
                 <div
                   key={g.app_id}
                   onClick={() => (selecting && g.has_lua ? toggleSelect(g.app_id) : onOpen(g))}
-                  className={`group cursor-pointer rounded-xl overflow-hidden bg-ctp-mantle border transition relative ${
+                  className={`theme-card theme-cover-tint group cursor-pointer rounded-xl overflow-hidden bg-ctp-mantle border transition relative ${
                     isSelected
                       ? "border-ctp-mauve ring-1 ring-ctp-mauve"
                       : "border-ctp-surface0 hover:border-ctp-mauve/70"
@@ -582,7 +582,7 @@ function Editor({
           }
         }}
         spellCheck={false}
-        className="flex-1 min-h-80 p-4 rounded-xl bg-ctp-mantle border border-ctp-surface0 font-mono text-xs text-ctp-text leading-relaxed resize-none focus:outline-none focus:border-ctp-mauve select-text"
+        className="theme-card flex-1 min-h-80 p-4 rounded-xl bg-ctp-mantle border border-ctp-surface0 font-mono text-xs text-ctp-text leading-relaxed resize-none focus:outline-none focus:border-ctp-mauve select-text"
       />
     </div>
   );

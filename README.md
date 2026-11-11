@@ -7,9 +7,9 @@
 
   Client desktop Windows pour gérer vos configurations Steam et scripts `.lua`, écrit en **Rust** (**Tauri v2**, **React** & **TypeScript**) avec un **installateur autonome** (`eframe` / `egui`).
 
-  **SteamUnlocker** gère la bibliothèque de scripts `config\stplug-in` (recherche instantanée par nom de jeu ou AppID, activation/désactivation `.lua` ↔ `.lua.disabled`, éditeur intégré, glisser-déposer `.lua` / `.st` / `.manifest`), l'installation et le réglage de **BetterSteamTools** et **CloudRedirect** via l'onglet **Mode**, ainsi que **5 thèmes** visuels dont le thème **Classic**.
+  **SteamUnlocker** gère la bibliothèque de scripts `config\stplug-in` (recherche instantanée par nom de jeu ou AppID, activation/désactivation `.lua` ↔ `.lua.disabled`, éditeur intégré, glisser-déposer `.lua` / `.st` / `.manifest`), l'onglet **Recherche** (recherche Steam Store et téléchargement/installation directe de fichiers `.lua`, `.manifest` ou `.zip` multi-sources), la gestion de **BetterSteamTools** et **CloudRedirect** via **Mode**, ainsi que **7 thèmes** visuels dont le thème **Classic** et 2 thèmes de jeux authentiques (**Yume Nikki**, **Milk**).
 
-  Entièrement en français, 100 % local, sans Discord ni téléchargement de jeux, avec **mises à jour automatiques** intégrées au démarrage via GitHub Releases.
+  Entièrement en français, autonome (sans Discord), avec **mises à jour automatiques** intégrées au démarrage via GitHub Releases.
 </p>
 
 <br clear="right" />
