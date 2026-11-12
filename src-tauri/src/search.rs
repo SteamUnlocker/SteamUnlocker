@@ -9,9 +9,10 @@ use tauri::Emitter;
 
 const STORE_URL: &str = "https://store.steampowered.com";
 const COMMUNITY_URL: &str = "https://steamcommunity.com";
-const HTTP_TIMEOUT_SECS: u64 = 8;
-const SOURCE_TIMEOUT_SECS: u64 = 15;
-const SOURCE_CONNECT_SECS: u64 = 4;
+const HTTP_TIMEOUT_SECS: u64 = 10;
+const SOURCE_TIMEOUT_SECS: u64 = 120;
+const SOURCE_READ_SECS: u64 = 15;
+const SOURCE_CONNECT_SECS: u64 = 5;
 const SOURCE_COOLDOWN_SECS: u64 = 60;
 const ZIP_CACHE_TTL_SECS: u64 = 24 * 3600;
 const DETAILS_CACHE_TTL_SECS: u64 = 1800;
@@ -27,39 +28,9 @@ struct SourceDef {
 
 const SOURCES: &[SourceDef] = &[
     SourceDef {
-        slug: "ryuu",
-        name: "Ryuu DB",
-        url_template: "http://167.235.229.108/{appid}",
-        ryuu_headers: true,
-    },
-    SourceDef {
-        slug: "sushi",
-        name: "Sushi DB",
-        url_template: "https://github.com/sushi-dev55-alt/sushitools-games-repo-alt/raw/refs/heads/main/{appid}.zip",
-        ryuu_headers: false,
-    },
-    SourceDef {
-        slug: "r2",
-        name: "R2",
+        slug: "luie",
+        name: "Luie (R2)",
         url_template: "https://pub-5b6d3b7c03fd4ac1afb5bd3017850e20.r2.dev/{appid}.zip",
-        ryuu_headers: false,
-    },
-    SourceDef {
-        slug: "luagen",
-        name: "Luagen",
-        url_template: "https://api.luagen.revo-bd.club/{appid}.zip",
-        ryuu_headers: false,
-    },
-    SourceDef {
-        slug: "manifesthub",
-        name: "ManifestHub",
-        url_template: "https://codeload.github.com/SteamAutoCracks/ManifestHub/zip/refs/heads/{appid}",
-        ryuu_headers: false,
-    },
-    SourceDef {
-        slug: "steamcooked",
-        name: "Steam Cooked DB",
-        url_template: "http://144.2.72.69:3000/Axolat/SteamManifestDB/raw/branch/main/{appid}.zip",
         ryuu_headers: false,
     },
 ];
@@ -209,6 +180,7 @@ fn store_http_client(timeout_secs: u64, user_agent: &str) -> Result<reqwest::Cli
     reqwest::Client::builder()
         .user_agent(user_agent)
         .connect_timeout(Duration::from_secs(SOURCE_CONNECT_SECS))
+        .read_timeout(Duration::from_secs(SOURCE_READ_SECS))
         .timeout(Duration::from_secs(timeout_secs))
         .build()
         .map_err(|e| format!("Erreur réseau : {e}"))
@@ -731,6 +703,7 @@ pub async fn download_game_files(
     }
 
     // 2. Sinon interroger les sources dans l'ordre
+    let mut errors: Vec<String> = Vec::new();
     if chosen.is_none() {
         for src in &sources {
             if requested_slug.is_none() && in_cooldown(src.slug) {
@@ -752,7 +725,8 @@ pub async fn download_game_files(
                     chosen = Some((src.name, bytes));
                     break;
                 }
-                Err((_err, is_net_err)) => {
+                Err((err, is_net_err)) => {
+                    errors.push(format!("{} : {err}", src.name));
                     if requested_slug.is_none() && is_net_err {
                         set_cooldown(src.slug);
                     }
@@ -761,8 +735,13 @@ pub async fn download_game_files(
         }
     }
 
-    let (source_name, bytes) =
-        chosen.ok_or_else(|| "Archive ZIP introuvable sur les sources demandées".to_owned())?;
+    let (source_name, bytes) = chosen.ok_or_else(|| {
+        if errors.is_empty() {
+            "Aucune source disponible actuellement pour cet AppID".to_owned()
+        } else {
+            format!("Fichiers introuvables ({})", errors.join(" | "))
+        }
+    })?;
     let size_bytes = bytes.len();
 
     if !install_mode {
@@ -897,5 +876,18 @@ mod tests {
             zw.finish().unwrap();
         }
         assert!(valid_zip_bytes(&buf.into_inner()));
+    }
+
+    #[test]
+    #[ignore = "Nécessite un accès réseau vers Cloudflare R2"]
+    fn live_luie_r2_download_works_via_reqwest() {
+        tauri::async_runtime::block_on(async {
+            let client = store_http_client(SOURCE_TIMEOUT_SECS, "SteamUnlocker/1.6").unwrap();
+            let url = SOURCES[0].url_template.replace("{appid}", "1604000");
+            let resp = client.get(&url).send().await.unwrap().error_for_status().unwrap();
+            let bytes = resp.bytes().await.unwrap();
+            assert!(bytes.len() > 10_000, "unexpected small ZIP: {}", bytes.len());
+            assert!(valid_zip_bytes(&bytes), "response is not a valid ZIP");
+        });
     }
 }

@@ -156,7 +156,7 @@ export function SettingsView({
 
       <Section
         title="Mises à jour automatiques"
-        hint={`Version installée : v${updateInfo?.current_version ?? "1.6.0"} · GitHub Releases (SteamUnlocker)`}
+        hint={`Version installée : v${updateInfo?.current_version ?? "1.6.1"} · GitHub Releases (SteamUnlocker)`}
       >
         <div className="theme-card rounded-xl bg-ctp-mantle border border-ctp-surface0 p-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -291,7 +291,7 @@ export function SettingsView({
       </Section>
 
       <p className="text-xs text-ctp-overlay0">
-        SteamUnlocker v{updateInfo?.current_version ?? "1.6.0"} · Local, sans compte ni connexion Discord.
+        SteamUnlocker v{updateInfo?.current_version ?? "1.6.1"} · Local, sans compte ni connexion Discord.
       </p>
     </div>
   );

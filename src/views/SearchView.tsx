@@ -33,12 +33,7 @@ interface Props {
 }
 
 const DEFAULT_SOURCES: DownloadSourceInfo[] = [
-  { slug: "ryuu", name: "Ryuu DB" },
-  { slug: "sushi", name: "Sushi DB" },
-  { slug: "r2", name: "R2" },
-  { slug: "luagen", name: "Luagen" },
-  { slug: "manifesthub", name: "ManifestHub" },
-  { slug: "steamcooked", name: "Steam Cooked DB" },
+  { slug: "luie", name: "Luie (R2)" },
 ];
 
 export function SearchView({
